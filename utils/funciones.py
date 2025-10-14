@@ -1,4 +1,8 @@
-def fucion_graficas_ecu_log():
+def fucion_graficas_ecu_log(P0,K,t_max,r):
+    
+    import numpy as np 
+    import plotly.graph_objects as go
+
     t=np.linspace(0, t_max, 20)
 
     P=(P0*K*np.exp(r*t))/((K-P0)+P0*np.exp(r*t))
@@ -9,7 +13,7 @@ def fucion_graficas_ecu_log():
         mode='lines+markers',
         name='Población P(t)',
         line=dict(
-            color='blue',
+            color='green',
             width=2
         ),
         marker=dict(
@@ -23,7 +27,7 @@ def fucion_graficas_ecu_log():
         x=[0, t_max],
         y=[K,K],
         mode='lines',
-        name='capcidad de carga (K)',
+        name='Capacidad de carga (K)',
         line=dict(
             color='red',
             width=2,
@@ -44,8 +48,8 @@ def fucion_graficas_ecu_log():
     xaxis_title='Tiempo (t)',
     yaxis_title='Población P(t)',
     margin=dict(l=40, r=40, t=70, b=40),
-    paper_bgcolor='lightblue',
-    plot_bgcolor='white',
+    paper_bgcolor='white',
+    plot_bgcolor='lightpink',
     font=dict(
         family='Outfit', 
         size=11, 
@@ -58,14 +62,14 @@ def fucion_graficas_ecu_log():
     )
     
     fig.update_xaxes(
-    showgrid=True, gridwidth=1, gridcolor='lightpink',
+    showgrid=True, gridwidth=1, gridcolor='black',
     zeroline=True, zerolinewidth=2, zerolinecolor='red',
     showline=True, linecolor='black', linewidth=2, mirror=True,
     range=[0, t_max]
     )
 
     fig.update_yaxes(
-    showgrid=True, gridwidth=1, gridcolor='lightpink',
+    showgrid=True, gridwidth=1, gridcolor='black',
     zeroline=True, zerolinewidth=2, zerolinecolor='red',
     showline=True, linecolor='black', linewidth=2, mirror=True,
     range=[0, K+K*0.1]
