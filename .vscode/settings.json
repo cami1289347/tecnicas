@@ -1,3 +1,5 @@
 {
-    "python.analysis.autoImportCompletions": true
+    "python.analysis.autoImportCompletions": true,
+    "java.dependency.syncWithFolderExplorer": false,
+    "java.project.explorer.showNonJavaResources": false
 }
