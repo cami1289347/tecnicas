@@ -66,8 +66,8 @@ layout = html.Div([
 
         html.Div([
             html.Div([
-                html.H4("Total de Casos: ", style={'color': "#FC5FFC"}),
-                html.H3(id="total-casos", style={'color': 'blue'}),
+                html.H4("Total de Casos: ", style={'color': "#C27DD3"}),
+                html.H3(id="total-casos", style={'color': "#90609C"}),
 
             ], style={
                 "background-color": "#F0F8FF",
@@ -78,8 +78,8 @@ layout = html.Div([
                 }),
             
             html.Div([
-                html.H4("Casos nuevos: ", style={'color': "#FC5FFC"}),
-                html.H3(id="casos-nuevos", style={'color': 'blue'}),
+                html.H4("Casos nuevos: ", style={'color': "#55B5EC"}),
+                html.H3(id="casos-nuevos", style={'color': "#4A9AC9"}),
 
             ], style={
                 "background-color": "#F0F8FF",
@@ -90,9 +90,8 @@ layout = html.Div([
                 }),
             
             html.Div([
-                html.H4("Total muertes: ", style={'color': "#FC5FFC"}),
-                html.H3(id="total-muertes", style={'color': 'blue'}),
-
+                html.H4("Total muertes: ", style={'color': "#DA76DA"}),
+                html.H3(id="total-muertes", style={'color': "#90609C"}),
             ], style={
                 "background-color": "#F0F8FF",
                 "padding": "10px",
@@ -102,8 +101,8 @@ layout = html.Div([
                 }),
 
             html.Div([
-                html.H4("Total recuperados: ", style={'color': "#FC5FFC"}),
-                html.H3(id="total-recuperados", style={'color': 'blue'}),
+                html.H4("Total recuperados: ", style={'color': "#4BD6B8"}),
+                html.H3(id="total-recuperados", style={'color': "#34A18A"}),
 
             ], style={
                 "background-color": "#F0F8FF",
@@ -179,8 +178,8 @@ def actualizar_datos_covid(n_clicks, pais, dias):
         )
 
         fig.update_layout(
-            paper_bgcolor="white",
-            plot_bgcolor="white",
+            paper_bgcolor="black",
+            plot_bgcolor="black",
         )
         return "N/A", "N/A", "N/A", "N/A" , fig, "No se pudieron actualizar los datos."
     
@@ -210,6 +209,8 @@ def actualizar_datos_covid(n_clicks, pais, dias):
         x=fechas_dt, 
         y=valores_casos,
         mode='lines',
+        fill='tozeroy',
+        fillcolor="#9DB0FF",
         name='Casos Totales',
         line=dict(color='blue', width=2),
         hovertemplate='Fecha: %{x|%Y-%m-%d}<br>Casos: %{y:,}<extra></extra>'
@@ -219,9 +220,27 @@ def actualizar_datos_covid(n_clicks, pais, dias):
         x=fechas_dt,
         y=valores_muertes,
         mode='lines',
+        fill='tozeroy',
+        fillcolor="#F38698",
         name='Muertes Totales',
         line=dict(color='red', width=2),
         hovertemplate='Fecha: %{x|%Y-%m-%d}<br>Muertes: %{y:,}<extra></extra>'
     ))
+    
+    fig.update_layout(
+        xaxis_title="Fecha",
+        yaxis_title="Número de Personas",
+        font=dict(
+            family="Montserrat", 
+            size=12,
+            color="black"
+            ),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+        ),  
+        margin=dict(l=40, r=40, t=70, b=40)
+    )
 
     return [total_casos_texto, casos_hoy_texto, total_muertes_texto, total_recuperados_texto, fig, f"Datos actualizados para {pais}" ]
