@@ -72,6 +72,20 @@ a {
     margin-top: 3px;
 }
 
+.input-grid-params {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columnas */
+    gap: 15px 20px;
+    color: rgb(136, 77, 77);
+}
+
+/* Estilo para las condiciones iniciales/tiempo */
+.input-grid-init {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px 20px;
+    color: rgb(136, 77, 77);
+}
 
 .presentacion {
      padding: 1% 10% 5% 10%;
