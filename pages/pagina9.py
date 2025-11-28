@@ -15,8 +15,8 @@ dash.register_page(__name__, path='/neo_dashboard', name='NeoWs Dashboard')
 def obtener_datos_neos(dias):
     """Obtiene datos de asteroides (NEOs) de la API de la NASA para un rango de días."""
     try:
-        if dias == 'max': # Opción para rango largo (simulando "Todo el histórico" para la API Feed)
-            dias = 7 # La API Feed solo permite un máximo de 7 días entre start_date y end_date
+        if dias == 'max': 
+            dias = 7
             
         end_date = date.today()
         start_date = end_date - timedelta(days=dias)
@@ -67,7 +67,6 @@ def formatear_numero(num):
 
 layout = html.Div([
 
-    # Contenedor de Controles y Tabla (Izquierda) - Ahora flexible pero limitado a 50%
     html.Div([
 
         html.H2("☄️ Control y Detalle de Asteroides (NeoWs)", className="title"),
@@ -99,7 +98,7 @@ layout = html.Div([
         html.H3("Tabla de Detalle de Objetos Cercanos a la Tierra", 
                     style={'marginTop': '10px', 'marginBottom': '10px', 'fontSize': '1.3em', 'color': 'black'}),
         
-        # Envolver la tabla en un div para controlar el overflow
+        
         html.Div([
             dash_table.DataTable(
                 id='tabla-neos',
@@ -330,7 +329,7 @@ def actualizar_datos_neos(n_clicks, dias):
                ),
                margin=dict(l=40, r=40, t=70, b=40)
                )
-    # --- Devolver Resultados ---
+    
     return [
         formatear_numero(total_neos),
         formatear_numero(peligrosos_count),
