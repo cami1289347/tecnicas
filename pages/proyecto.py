@@ -6,7 +6,7 @@ from scipy.integrate import solve_ivp  # Importamos solve_ivp
 
 dash.register_page(__name__, path='/Proyecto', name='Proyecto')
 
-# --- Definición del Sistema de Ecuaciones Diferenciales ---
+# Definición del Sistema de Ecuaciones Diferenciales
 def sistema_sip(t, y, params):
     xS, xI, y_pred = y
 
@@ -25,7 +25,7 @@ def sistema_sip(t, y, params):
     c = params['c']
     d = params['d']
 
-    # Ecuaciones Diferenciales 
+    
     dxS_dt = r * xS * (1 - (xS + xI) / K) - alpha * xS * xI + g * xI - a1 * (1 - m) * xS * y_pred - mu * xS
     dxI_dt = alpha * xS * xI - (mu + g + rho) * xI - a2 * (1 - n) * xI * y_pred
     dy_dt = a1 * w1 * (1 - m) * xS * y_pred + a2 * w2 * (1 - n) * xI * y_pred - c * y_pred - d * y_pred**2
@@ -49,7 +49,7 @@ DEFAULT_PARAMS = {
     "c": {"label": "Mortalidad Depredador (c)", "value": 0.035, "step": 0.001},
     "d": {"label": "Competencia Depredador (d)", "value": 0.01, "step": 0.001},
 }
-# --- Inputs de Condiciones Iniciales y Tiempo ---
+
 INITIAL_CONDITIONS = {
     "xS0": {"label": "Presas Susceptibles Iniciales (xS₀)", "value": 12.0, "step": 0.1},
     "xI0": {"label": "Presas Infectadas Iniciales (xI₀)", "value": 3.0, "step": 0.1},
@@ -57,7 +57,7 @@ INITIAL_CONDITIONS = {
     "tiempo": {"label": "Tiempo de simulación", "value": 1000, "step": 10},
 }
 
-# Función auxiliar para generar los inputs dinámicamente
+
 def generate_input_group(id_key, config):
     return html.Div([
         html.Label(config["label"]),
@@ -95,8 +95,8 @@ layout = html.Div([
     ], className="content left"),
 
     html.Div([
-        html.H2("Gráfica de la Dinámica Poblacional", className="title", style={'marginBottom': '10px'}),  # Agregué margen inferior para separar del gráfico
-        dcc.Graph(id="grafica-sip", style={"height": "650px", "width": "100%"}),  # Aumenté la altura para dar más espacio al título interno
+        html.H2("Gráfica de la Dinámica Poblacional", className="title", style={'marginBottom': '10px'}),  
+        dcc.Graph(id="grafica-sip", style={"height": "650px", "width": "100%"}),
     ], className="content right"),
 
 
@@ -116,12 +116,12 @@ for key in DEFAULT_PARAMS.keys():
 @callback(
     Output("grafica-sip", "figure"),
     Input("btn-simular", "n_clicks"),
-    all_states,  # Lista dinámica de States
+    all_states,  
     prevent_initial_call=False
 )
 
 def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, rho, a2, n, w1, w2, c, d):
-    # Crear el diccionario de parámetros para pasar a la función del sistema
+    
     params = {
         'r': r, 'K': K, 'alpha': alpha, 'g': g, 'a1': a1, 'm': m, 'mu': mu, 'rho': rho,
         'a2': a2, 'n': n, 'w1': w1, 'w2': w2, 'c': c, 'd': d,
@@ -133,14 +133,14 @@ def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, r
     t_eval = np.linspace(0, tiempo_max, 2000)
 
     try:
-        # Resolvemos el sistema de EDOs con solve_ivp
+       
         solucion = solve_ivp(
             sistema_sip, 
             t_span, 
             y0_vec, 
             t_eval=t_eval, 
             method='RK45', 
-            args=(params,)  # Pasamos los parámetros como args (tuplas)
+            args=(params,) 
         )
         xS, xI, y_pred = solucion.y
         t = solucion.t
@@ -191,14 +191,14 @@ def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, r
     ))
 
     fig.update_layout(
-        title="<b>Simulación del Sistema Depredador-Presa-Enfermedad</b>",  # Restauré el título de la figura
+        title="<b>Simulación del Sistema Depredador-Presa-Enfermedad</b>",  
         xaxis_title="Tiempo",
         yaxis_title="Densidad de Población",
         plot_bgcolor='lightyellow',
         paper_bgcolor='White',
         font=dict(family="Arial", size=12, color="black"),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0), 
-        margin=dict(l=40, r=40, t=100, b=40)  # Aumenté el margen superior para dar espacio al título interno y evitar superposición
+        margin=dict(l=40, r=40, t=100, b=40)  
     )
     fig.update_xaxes(
         showgrid=True, gridwidth=1, gridcolor='black', 
