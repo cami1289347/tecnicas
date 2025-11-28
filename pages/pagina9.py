@@ -67,7 +67,7 @@ def formatear_numero(num):
 
 layout = html.Div([
 
-    # Contenedor de Controles y Tabla (Izquierda) - 50% de ancho (flex: 1)
+    # Contenedor de Controles y Tabla (Izquierda) - Ahora flexible pero limitado a 50%
     html.Div([
 
         html.H2("☄️ Control y Detalle de Asteroides (NeoWs)", className="title"),
@@ -161,7 +161,7 @@ layout = html.Div([
             )
         ], style={'width': '100%', 'overflowX': 'auto'})  # Div envolvente para scroll horizontal si es necesario
 
-    ], className="content left", style={'flex': '1', 'padding': '15px', 'backgroundColor': '#f8f9fa'}),  # Reducido padding a 15px
+    ], className="content left", style={'flex': '1', 'maxWidth': '50%', 'padding': '15px', 'backgroundColor': '#f8f9fa'}),  # Cambiado: flex 1 con maxWidth 50% para evitar overflow
 
 
     html.Div([
@@ -251,7 +251,8 @@ layout = html.Div([
         # Gráfico principal: Velocidad vs. Distancia
         dcc.Graph(id="grafica-neos-scatter", style={"height": "450px", "width": "100%"}),
 
-    ], className="content right", style={'flex': '1','padding': '15px'})  # Reducido padding a 15px
+    ], className="content right", style={'flex': '1', 'maxWidth': '50%', 'padding': '15px'})  # Cambiado: flex 1 con maxWidth 50% para evitar overflow
+
 
 ], className="page-container", style={'display': 'flex', 'flexDirection': 'row'})
 
@@ -285,6 +286,7 @@ def actualizar_datos_neos(n_clicks, dias):
             color="red",        
             family="Montserrat"
         ),
+   
     ).update_layout(paper_bgcolor="#EFEFEF", plot_bgcolor="#EFEFEF")
 
     if df.empty:

@@ -6,11 +6,10 @@ from scipy.integrate import solve_ivp  # Importamos solve_ivp
 
 dash.register_page(__name__, path='/Proyecto', name='Proyecto')
 
-# --- Definición del Sistema de Ecuaciones Diferenciales (actualizado según el sistema proporcionado) ---
+# --- Definición del Sistema de Ecuaciones Diferenciales ---
 def sistema_sip(t, y, params):
     xS, xI, y_pred = y
 
-    # Desempaquetar parámetros
     r = params['r']
     K = params['K']
     alpha = params['alpha']
@@ -26,15 +25,14 @@ def sistema_sip(t, y, params):
     c = params['c']
     d = params['d']
 
-    # Ecuaciones Diferenciales (según el sistema proporcionado)
+    # Ecuaciones Diferenciales 
     dxS_dt = r * xS * (1 - (xS + xI) / K) - alpha * xS * xI + g * xI - a1 * (1 - m) * xS * y_pred - mu * xS
     dxI_dt = alpha * xS * xI - (mu + g + rho) * xI - a2 * (1 - n) * xI * y_pred
     dy_dt = a1 * w1 * (1 - m) * xS * y_pred + a2 * w2 * (1 - n) * xI * y_pred - c * y_pred - d * y_pred**2
 
     return [dxS_dt, dxI_dt, dy_dt]
 
-# --- Diccionario de Parámetros por defecto para el Layout (actualizado) ---
-# Incluye rho y n, y ajusta valores según el código Matplotlib proporcionado
+
 DEFAULT_PARAMS = {
     "r": {"label": "Crecimiento intrínseco (r)", "value": 0.10, "step": 0.01},
     "K": {"label": "Capacidad de carga (K)", "value": 60.0, "step": 1.0},
@@ -72,7 +70,7 @@ def generate_input_group(id_key, config):
         )
     ], className="input-group")
 
-# --- Layout del Dashboard ---
+
 layout = html.Div([
 
     html.Div([
@@ -97,42 +95,21 @@ layout = html.Div([
     ], className="content left"),
 
     html.Div([
-    html.H2("Gráfica de la Dinámica Poblacional", className="title"),
-    dcc.Graph(id="grafica-sip", style={"height": "600px", "width": "100%"}),
+        html.H2("Gráfica de la Dinámica Poblacional", className="title", style={'marginBottom': '10px'}),  # Agregué margen inferior para separar del gráfico
+        dcc.Graph(id="grafica-sip", style={"height": "650px", "width": "100%"}),  # Aumenté la altura para dar más espacio al título interno
+    ], className="content right"),
 
-    html.Div(id="valores-equilibrio", children=[
-        html.P([
-            "En esta gráfica se presenta la evolución temporal de las tres poblaciones del sistema depredador-presa con enfermedad (SI-P): las ",
-            html.Strong("presas susceptibles (xS)"), ", las ",
-            html.Strong("presas infectadas (xI)"), " y los ",
-            html.Strong("depredadores (y)"), ". La dinámica poblacional resultante depende directamente de los parámetros ecológicos y condiciones iniciales definidos en el panel de control."
-        ]),
-
-        html.H4("Valores de Equilibrio al Final de la Simulación:", style={"marginTop": "15px"}),
-        html.Ul([
-            html.Li(["Presas Susceptibles (xS): ", html.Span(id="xS-final", children="—")]),
-            html.Li(["Presas Infectadas (xI): ", html.Span(id="xI-final", children="—")]),
-            html.Li(["Depredadores (y): ", html.Span(id="y-final", children="—")]),
-        ]),
-        
-
-
-        html.P("Estos valores representan los equilibrios poblacionales alcanzados al final del periodo de simulación, los cuales pueden variar al modificar parámetros.")
-    ], style={"marginTop": "20px", "padding": "15px", "backgroundColor": "#f8f9fa", "borderRadius": "5px"})
-], className="content right"),
 
 ], className="page-container")
 
-# --- Callback de Simulación ---
 
-# Definir todos los Inputs/States que usaremos
 all_states = [
     State("input-xS0", "value"),
     State("input-xI0", "value"),
     State("input-y0", "value"),
     State("input-tiempo", "value"),
 ]
-# Añadir todos los parámetros a la lista de States
+
 for key in DEFAULT_PARAMS.keys():
     all_states.append(State(f"input-{key}", "value"))
 
@@ -142,7 +119,7 @@ for key in DEFAULT_PARAMS.keys():
     all_states,  # Lista dinámica de States
     prevent_initial_call=False
 )
-# Nota: Los argumentos de la función deben seguir el orden de all_states
+
 def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, rho, a2, n, w1, w2, c, d):
     # Crear el diccionario de parámetros para pasar a la función del sistema
     params = {
@@ -173,7 +150,7 @@ def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, r
         t = np.linspace(0, tiempo_max, 2000)
         xS, xI, y_pred = np.full_like(t, xS0), np.full_like(t, xI0), np.full_like(t, y0)
 
-    # --- Creación de la Figura Plotly ---
+
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
@@ -197,7 +174,6 @@ def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, r
         hovertemplate='Tiempo: %{x:.0f}<br>y: %{y:.2f}<extra></extra>'
     ))
 
-    # Añadir el punto final (equilibrio)
     fig.add_trace(go.Scatter(
         x=[t[-1]], y=[xS[-1]], mode='markers', name='xS Final', 
         marker=dict(color='green', size=8), showlegend=False,
@@ -215,15 +191,14 @@ def simular_sip(n_clicks, xS0, xI0, y0, tiempo_max, r, K, alpha, g, a1, m, mu, r
     ))
 
     fig.update_layout(
-        title="<b>Simulación del Sistema Depredador-Presa-Enfermedad</b>",
+        title="<b>Simulación del Sistema Depredador-Presa-Enfermedad</b>",  # Restauré el título de la figura
         xaxis_title="Tiempo",
         yaxis_title="Densidad de Población",
         plot_bgcolor='lightyellow',
         paper_bgcolor='White',
         font=dict(family="Arial", size=12, color="black"),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0), 
-        margin=dict(l=40, r=40, t=70, b=40)
-
+        margin=dict(l=40, r=40, t=100, b=40)  # Aumenté el margen superior para dar espacio al título interno y evitar superposición
     )
     fig.update_xaxes(
         showgrid=True, gridwidth=1, gridcolor='black', 
