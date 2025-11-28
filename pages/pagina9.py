@@ -35,10 +35,10 @@ def obtener_datos_neos(dias):
         return pd.DataFrame(), f"Error de conexión: {e}"
 
     neos = []
-    # Itera sobre los datos por fecha
+    
     for date_str, neo_list in data.get('near_earth_objects', {}).items():
         for neo in neo_list:
-            # Solo consideramos el primer acercamiento si hay múltiples
+            
             close_approach = neo['close_approach_data'][0]
             
             neos.append({
@@ -52,7 +52,7 @@ def obtener_datos_neos(dias):
             })
             
     df = pd.DataFrame(neos)
-    # Prepara la columna 'es_peligroso' para visualización
+    
     df['es_peligroso_str'] = df['es_peligroso'].apply(lambda x: 'Sí' if x else 'No')
     
     return df, f"Datos actualizados para el rango: {start_date} a {end_date}"
@@ -121,8 +121,8 @@ layout = html.Div([
                     'borderRadius': '8px',
                     'boxShadow': '0 2px 4px rgba(0,0,0,0.05)',
                     "textAlign": "center",
-                    'width': '100%',  # Asegurar que la tabla ocupe el 100% del contenedor
-                    'minWidth': '600px'  # Mínimo ancho para evitar que se comprima demasiado
+                    'width': '100%', 
+                    'minWidth': '600px' 
                 },
                 style_header={
                     'backgroundColor': '#003366', 
@@ -136,16 +136,16 @@ layout = html.Div([
                     'textAlign': 'center',
                     'padding': '8px',
                     'fontSize': '0.85em',
-                    'minWidth': '80px',  # Mínimo ancho por celda para evitar compresión excesiva
-                    'maxWidth': '150px',  # Máximo ancho para controlar expansión
+                    'minWidth': '80px',  
+                    'maxWidth': '150px',
                     'overflow': 'hidden',
                     'textOverflow': 'ellipsis'
                 },
                 style_data_conditional=[
                     { # Estilo para filas peligrosas
                         'if': {'filter_query': '{es_peligroso_str} = "Sí"'},
-                        'backgroundColor': '#FFEBEE', # Rojo pálido suave
-                        'color': '#D32F2F',          # Rojo oscuro para el texto
+                        'backgroundColor': '#FFEBEE', 
+                        'color': '#D32F2F',         
                         'fontWeight': 'bold'
                     },
                     { # Estilo para la columna de Peligroso
@@ -158,9 +158,9 @@ layout = html.Div([
                 page_size=10, 
                 export_format='csv'
             )
-        ], style={'width': '100%', 'overflowX': 'auto'})  # Div envolvente para scroll horizontal si es necesario
+        ], style={'width': '100%', 'overflowX': 'auto'})  
 
-    ], className="content left", style={'flex': '1', 'maxWidth': '50%', 'padding': '15px', 'backgroundColor': '#f8f9fa'}),  # Cambiado: flex 1 con maxWidth 50% para evitar overflow
+    ], className="content left", style={'flex': '1', 'maxWidth': '50%', 'padding': '15px', 'backgroundColor': '#f8f9fa'}),
 
 
     html.Div([
@@ -183,7 +183,7 @@ layout = html.Div([
                 'borderRadius': '8px', 
                 'backgroundColor': '#E6F0FF', 
                 'textAlign': 'center',
-                'minHeight': '120px',  # Añadido para uniformizar el tamaño de las tarjetas
+                'minHeight': '120px', 
                 'display': 'flex',
                 'flexDirection': 'column',
                 'justifyContent': 'center'
@@ -200,7 +200,7 @@ layout = html.Div([
                 'borderRadius': '8px', 
                 'backgroundColor': '#FFE6E6', 
                 'textAlign': 'center',
-                'minHeight': '120px',  # Añadido para uniformizar el tamaño de las tarjetas
+                'minHeight': '120px',  
                 'display': 'flex',
                 'flexDirection': 'column',
                 'justifyContent': 'center'
@@ -217,7 +217,7 @@ layout = html.Div([
                 'borderRadius': '8px', 
                 'backgroundColor': '#E6FFE6', 
                 'textAlign': 'center',
-                'minHeight': '120px',  # Añadido para uniformizar el tamaño de las tarjetas
+                'minHeight': '120px', 
                 'display': 'flex',
                 'flexDirection': 'column',
                 'justifyContent': 'center'
@@ -234,7 +234,7 @@ layout = html.Div([
                 'borderRadius': '8px', 
                 'backgroundColor': '#FFF5E6', 
                 'textAlign': 'center',
-                'minHeight': '120px',  # Añadido para uniformizar el tamaño de las tarjetas
+                'minHeight': '120px',  
                 'display': 'flex',
                 'flexDirection': 'column',
                 'justifyContent': 'center'
@@ -250,7 +250,7 @@ layout = html.Div([
         # Gráfico principal: Velocidad vs. Distancia
         dcc.Graph(id="grafica-neos-scatter", style={"height": "450px", "width": "100%"}),
 
-    ], className="content right", style={'flex': '1', 'maxWidth': '50%', 'padding': '15px'})  # Cambiado: flex 1 con maxWidth 50% para evitar overflow
+    ], className="content right", style={'flex': '1', 'maxWidth': '50%', 'padding': '15px'})  
 
 
 ], className="page-container", style={'display': 'flex', 'flexDirection': 'row'})
@@ -303,7 +303,7 @@ def actualizar_datos_neos(n_clicks, dias):
         color='es_peligroso_str',
         size='diametro_max_km',
         hover_name='nombre',
-        log_x=True, # Usar escala logarítmica en X para mejor visualización de la distancia
+        log_x=True, 
         title=f'Velocidad vs. Distancia de Acercamiento para NEOs ({dias} días)',
         labels={
             'distancia_lunar': 'Distancia de Paso Cercano (Distancias Lunares)',
@@ -317,7 +317,7 @@ def actualizar_datos_neos(n_clicks, dias):
        legend_title_text='Potencialmente Peligroso',
        legend=dict(
            orientation="h",
-           yanchor="top", # Cambiado de "bottom" a "top"
+           yanchor="top",
            y=0.98,
            xanchor="left",
            x=0.01
